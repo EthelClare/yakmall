@@ -13,6 +13,7 @@
     <modules>
         <module>yak-common</module>
         <module>yak-service</module>
+        <module>yak-api</module>
     </modules>
 
     <parent>

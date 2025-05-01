@@ -1,6 +1,9 @@
 package com.yakmall.domain.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.yakmall.enums.UserStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -24,6 +27,7 @@ public class UserBase implements Serializable {
     /**
      * 这个用作给系统来统计和判断用户的唯一性[唯一]
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -55,7 +59,7 @@ public class UserBase implements Serializable {
      使用状态
      *
      */
-    private Boolean status;
+    private UserStatus status;
 
     /**
      *
