@@ -13,6 +13,8 @@ import java.security.KeyPair;
 import java.time.Duration;
 import java.util.Date;
 
+import static com.yak.common.constant.JwtConstant.PAYLOAD_USER_KEY;
+
 
 @Slf4j
 @Component
@@ -20,7 +22,7 @@ public class JwtTool {
 
     private final JWTSigner jwtSigner;
 
-    private static final String PAYLOAD_USER_KEY = "user";
+
 
     private static final String PAYLOAD_TOKEN_TYPE = "type";
 

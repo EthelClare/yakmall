@@ -1,10 +1,16 @@
 package com.yakmall.domain.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,21 +24,29 @@ public class Item implements Serializable {
     /**
      * 唯一标识
      */
+    @TableId(value = "id",type = IdType.AUTO)
     private Long id;
+
 
     /**
      * 商品名称
      */
+    @NotBlank(message = "商品名称不能为空")
     private String name;
+
 
     /**
      * 价格
      */
+    @NotNull(message = "价格不能为空")
+    @DecimalMin(value = "0.01", message = "价格不能小于0.01")
     private Double price;
 
     /**
      * 库存数量
      */
+    @NotNull(message = "库存不能为空")
+    @Min(value = 0, message = "库存不能为负数")
     private Integer stock;
 
     /**
@@ -69,6 +83,7 @@ public class Item implements Serializable {
     /**
      * 商品状态 1-正常 2-下架 3-删除
      */
+    //TODO这里要修改成一个枚举类
     private Integer status;
 
     /**

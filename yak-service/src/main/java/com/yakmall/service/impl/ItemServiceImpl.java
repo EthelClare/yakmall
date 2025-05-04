@@ -1,0 +1,115 @@
+package com.yakmall.service.impl;
+
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yak.common.domain.dto.ItemCreateDTO;
+import com.yak.common.domain.dto.ItemQueryDTO;
+import com.yak.common.domain.dto.ItemUpdateDTO;
+import com.yak.common.result.Result;
+import com.yak.common.utils.UserContext;
+import com.yakmall.domain.po.Item;
+import com.yakmall.mapper.ItemMapper;
+import com.yakmall.service.IItemService;
+import com.yakmall.utils.BeanUtils;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements IItemService {
+
+
+    @Override
+    public Result<Void> createItem(ItemCreateDTO itemDTO) {
+        //添加校验
+        // 商品名字中不能包含特殊字符
+        if (containsInvalidChars(itemDTO.getName())) {
+            return Result.error(402,"不能包含特殊字符");
+        }
+        //添加价格判断
+        if(itemDTO.getPrice() <= 0) {
+            return Result.error(402,"价格不合法");
+        }
+        //判断库存
+        if(itemDTO.getStock() <= 0) {
+            return Result.error(402,"库存不能小于0");
+        }
+
+
+        Item item = new Item();
+        BeanUtil.copyProperties(itemDTO, item);
+        //防止前端传入ID
+        item.setId(null);
+        //默认状态正常
+        item.setStatus(1);
+        item.setCreateTime(LocalDateTime.now());
+        item.setUpdateTime(LocalDateTime.now());
+        Long userId = UserContext.getUser();
+        item.setCreateUser(userId);
+        item.setUpdateUser(userId);
+
+        // TODO再下面这段中需要加入防止用户重复提交相同商品的代码【利用redis短暂保存】
+        try {
+            save(item);
+            return Result.success().msg("创建商品成功" + item.getName());
+        } catch (Exception e) {
+            log.error("上传商品失败：{}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 根据id来修改商品
+     * @param itemUpdateDTO
+     * @return
+     */
+    @Override
+    public Result<Void> updateByID(ItemUpdateDTO itemUpdateDTO) {
+        //首先需要进行的是校验
+        // 商品名字中不能包含特殊字符
+        if (containsInvalidChars(itemUpdateDTO.getName())) {
+            return Result.error(402,"不能包含特殊字符");
+        }
+
+        //添加价格判断
+        if(itemUpdateDTO.getPrice() <= 0) {
+            return Result.error(402,"价格不合法");
+        }
+
+        //判断库存
+        if(itemUpdateDTO.getStock() <= 0) {
+            return Result.error(402,"库存不能小于0");
+        }
+
+        Item item = new Item();
+        BeanUtils.copyProperties(itemUpdateDTO, item);
+        item.setUpdateUser(UserContext.getUser());
+        updateById(item);
+        log.info("[更新操作] 操作人： {}, 更新ID ：{}", UserContext.getUser(), item.getId());
+
+        return Result.success().msg("更新成功");
+    }
+
+    /**
+     * 批量查询
+     * @param ids
+     * @return
+     */
+    @Override
+    public Result<List<ItemQueryDTO>> queryItemByIds(List<Long> ids) {
+        return Result.success(BeanUtils.copyList(listByIds(ids), ItemQueryDTO.class));
+    }
+
+
+
+    private boolean containsInvalidChars(String name) {
+        // 实现名称特殊字符校验逻辑
+        return name.matches(".*[\\\\/<>].*");
+    }
+}
