@@ -41,6 +41,14 @@ public class Result<T> {
         return result;
     }
 
+    // 新增无数据成功方法
+    public static Result<Void> error() {
+        Result<Void> result = new Result<>();
+        result.setCode(400);
+        result.setMsg("error");
+        return result;
+    }
+
     // 链式调用支持（可选）
     public Result<T> msg(String customMsg) {
         this.msg = customMsg;
