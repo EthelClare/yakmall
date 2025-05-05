@@ -60,7 +60,7 @@ public class Cart implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 价格
+     * 价格, 价格 分
      */
-    private Double price;
+    private Integer price;
 }

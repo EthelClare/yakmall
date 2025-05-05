@@ -18,11 +18,11 @@ public class ItemCreateDTO {
     private String name;
 
     /**
-     * 价格
+     * 价格， 单位 分
      */
     @NotNull(message = "价格不能为空")
-    @DecimalMin("0.01")
-    private Double price;
+    @DecimalMin("1")
+    private Integer price;
 
     /**
      * 库存数量

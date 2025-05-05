@@ -36,11 +36,11 @@ public class Item implements Serializable {
 
 
     /**
-     * 价格
+     * 价格， 单位 分
      */
     @NotNull(message = "价格不能为空")
-    @DecimalMin(value = "0.01", message = "价格不能小于0.01")
-    private Double price;
+    @DecimalMin(value = "1", message = "价格不能小于 1 分")
+    private Integer price;
 
     /**
      * 库存数量

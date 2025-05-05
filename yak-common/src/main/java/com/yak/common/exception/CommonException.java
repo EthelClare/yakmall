@@ -18,6 +18,12 @@ public class CommonException extends RuntimeException {
         this.module = module;
     }
 
+    public CommonException(String code, String module, String message, Throwable cause) {
+        super(message, cause);  // 调用父类带cause的构造
+        this.code = code;
+        this.module = module;
+    }
+
     //使用示例
     //throw new CommonException("INVALID_STATUS", "ORDER", "订单状态不合法");
 }

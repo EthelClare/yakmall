@@ -15,9 +15,9 @@ public class ItemQueryDTO {
     private String name;
 
     /**
-     * 价格
+     * 价格， 单位 分
      */
-    private Double price;
+    private Integer price;
 
     /**
      * 库存数量
