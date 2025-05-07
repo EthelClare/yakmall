@@ -16,7 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -24,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements IItemService {
 
+
+    private final ItemMapper itemMapper;
 
     @Override
     public Result<Void> createItem(ItemCreateDTO itemDTO) {
@@ -90,6 +94,7 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements II
         Item item = new Item();
         BeanUtils.copyProperties(itemUpdateDTO, item);
         item.setUpdateUser(UserContext.getUser());
+
         updateById(item);
         log.info("[更新操作] 操作人： {}, 更新ID ：{}", UserContext.getUser(), item.getId());
 
@@ -102,10 +107,17 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements II
      * @return
      */
     @Override
-    public Result<List<ItemQueryDTO>> queryItemByIds(List<Long> ids) {
+    public Result<List<ItemQueryDTO>> queryItemByIds(Collection<Long> ids) {
         return Result.success(BeanUtils.copyList(listByIds(ids), ItemQueryDTO.class));
     }
 
+    @Override
+    public Result<Void> deductStock(Map<Long, Integer> itemNumMap) {
+
+
+        itemMapper.batchDeductByMap(itemNumMap);
+        return Result.success().msg("扣减库存成功");
+    }
 
 
     private boolean containsInvalidChars(String name) {

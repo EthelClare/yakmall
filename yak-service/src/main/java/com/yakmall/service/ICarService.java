@@ -9,6 +9,7 @@ import com.yakmall.domain.po.Cart;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 public interface ICarService extends IService<Cart> {
 
@@ -22,4 +23,6 @@ public interface ICarService extends IService<Cart> {
     Result<CartUpdateDTO> updateCart(@Valid CartUpdateDTO cartUpdateDTO);
 
     Result<List<CartVO>> queryMyCarts();
+
+    Result<Void> cleanCartItems(@Valid Long userId, @Valid Set<Long> itemIds);
 }

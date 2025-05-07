@@ -1,62 +1,43 @@
 package com.yak.common.domain.dto;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 @ApiModel(description = "查询商品表单实体")
 public class ItemQueryDTO {
-    //id
+    @ApiModelProperty("id")
     private Long id;
 
-    /**
-     * 商品名称
-     */
+    @ApiModelProperty("商品名称")
     private String name;
 
-    /**
-     * 价格， 单位 分
-     */
+    @ApiModelProperty("价格，单位分")
     private Integer price;
 
-    /**
-     * 库存数量
-     */
+    @ApiModelProperty("库存数量")
     private Integer stock;
 
-    /**
-     * 商品图片
-     */
+    @ApiModelProperty("商品图片")
     private String image;
 
-    /**
-     * 商品类别
-     */
+    @ApiModelProperty("商品类别")
     private String category;
 
-    /**
-     * 品牌名称
-     */
+    @ApiModelProperty("品牌名称")
     private String brand;
 
-    /**
-     * 规格 【比如颜色，大小，等等】
-     */
+    @ApiModelProperty("规格 【比如颜色，大小，等等】")
     private String spec;
 
-    /**
-     * 销量
-     */
+    @ApiModelProperty("销量")
     private Integer sold;
 
-    /**
-     * 评论数量
-     */
+    @ApiModelProperty("评论数量")
     private Integer commentCount;
 
-    /**
-     * 商品状态 1-正常 2-下架 3-删除
-     */
+    @ApiModelProperty("商品状态 1-正常 2-下架 3-删除")
     private Integer status;
 
 }

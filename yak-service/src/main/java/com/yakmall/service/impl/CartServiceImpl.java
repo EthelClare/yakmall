@@ -16,6 +16,7 @@ import com.yakmall.utils.BeanUtils;
 import com.yakmall.utils.CollUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ import static com.yak.common.constant.CartConstant.CART_NUMBER_MAX;
 @RequiredArgsConstructor
 public class CartServiceImpl extends ServiceImpl<CarMapper, Cart> implements ICarService {
     private final IItemService itemService;
+    private final CarMapper cartMapper;
 
     @Override
     @Transactional
@@ -138,8 +140,27 @@ public class CartServiceImpl extends ServiceImpl<CarMapper, Cart> implements ICa
         }
     }
 
+    @Override
+    public Result<Void> cleanCartItems(Long userId, Set<Long> itemIds) {
 
-//    private boolean checkItemExists(Long itemId, Long userId) {
+        try {
+            // 调用数据层方法
+            int affectedRows = cartMapper.deleteByUserIdAndItemIds(userId, itemIds);
+
+            // 处理结果
+            if (affectedRows > 0) {
+                log.info("用户[{}]清理购物车成功，删除{}条记录", userId, affectedRows);
+                return Result.success();
+            }
+            return Result.error().msg("不存在");
+        } catch (DataAccessException e) {
+            log.error("购物车清理失败 | userId:{} itemIds:{} | {}", userId, itemIds, e.getMessage());
+            //TODO 这里异常待处理
+            throw e;
+        }
+    }
+
+    //    private boolean checkItemExists(Long itemId, Long userId) {
 //        Long count = lambdaQuery()
 //                .eq(Cart::getUserId, userId)
 //                .eq(Cart::getItemId, itemId)

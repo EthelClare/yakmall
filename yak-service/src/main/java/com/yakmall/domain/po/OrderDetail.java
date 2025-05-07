@@ -9,19 +9,18 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("orderDetail")
+@TableName("order_detail")
 public class OrderDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 订单详情id
+     * 订单详情id【这里的id生成策略建议和order表中保持一致】
      */
-    @TableId(value="id", type= IdType.AUTO)
+    @TableId(value="id", type= IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -59,14 +58,6 @@ public class OrderDetail implements Serializable {
      */
     private String image;
 
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
-
+    public OrderDetail(Long orderId, Long id, Integer integer, String name, String spec, Integer price, String image) {
+    }
 }

@@ -24,6 +24,5 @@ public class CommonException extends RuntimeException {
         this.module = module;
     }
 
-    //使用示例
     //throw new CommonException("INVALID_STATUS", "ORDER", "订单状态不合法");
 }

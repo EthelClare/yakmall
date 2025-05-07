@@ -4,6 +4,7 @@ package com.yakmall.domain.po;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -11,10 +12,16 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * 一个订单多种商品的时候，就多张order_detail表对应就好了
+ *
+ */
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("order")
+@TableName("orders")
+@Builder
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,7 +34,7 @@ public class Order implements Serializable {
     /**
      * 总金额，单位为分
      */
-    private Integer totalFee;
+    private Integer totalAmount;
 
     /**
      * 支付类型 1. 支付宝 2.微信 3.系统余额
